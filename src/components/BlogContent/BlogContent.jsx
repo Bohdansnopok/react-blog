@@ -2,10 +2,12 @@ import './BlogContent.css'
 import {posts} from "../../shared/projectData";
 import {BlogCard} from "./components/BlogCard";
 import {Component} from "react";
+import {AddPostForm} from "./components/AddPostForm";
 
 export class BlogContent extends Component {
     state = {
-        showBlog: true,
+        /*showBlog: true,*/
+        showAddForm: false,
         blockArr: JSON.parse(localStorage.getItem('blogPosts')) || posts
     }
 
@@ -20,13 +22,13 @@ export class BlogContent extends Component {
         localStorage.setItem('blogPosts', JSON.stringify(temp))
     }
 
-    toggleBlog = () => {
+    /*toggleBlog = () => {
         this.setState(({showBlog}) => {
             return {
                 showBlog: !showBlog
             }
         })
-    }
+    }*/
 
     deletePost = pos => {
         if (window.confirm(`Удалить ${this.state.blockArr[pos].title}?`)) {
@@ -38,6 +40,18 @@ export class BlogContent extends Component {
 
             localStorage.setItem('blogPosts', JSON.stringify(temp))
         }
+    }
+
+    handleAddFormShow = () => {
+        this.setState({
+            showAddForm: true,
+        })
+    }
+
+    handleAddFormHide = () => {
+        this.setState({
+            showAddForm: false,
+        })
     }
 
     render() {
@@ -56,20 +70,23 @@ export class BlogContent extends Component {
 
         return (
             <>
-                <button onClick={this.toggleBlog}>
+                {this.state.showAddForm ? <AddPostForm handleAddFormHide={this.handleAddFormHide}/> : null}
+
+                {/*<button onClick={this.toggleBlog}>
                     {
                         this.state.showBlog ? 'Скрыть блог' : 'Показать Блог'
                     }
-                </button>
-                {
-                    this.state.showBlog ?
-                        <>
-                            <h1>Simple Blog</h1>
-                            <div className="posts">
-                                {blogPosts}
-                            </div>
-                        </> : null
-                }
+                </button>*/}
+                {/*{
+                    this.state.showBlog ?*/}
+                <>
+                    <h1>Simple Blog</h1>
+                    <button className="blackBtn" onClick={this.handleAddFormShow}>Создать новый пост</button>
+                    <div className="posts">
+                        {blogPosts}
+                    </div>
+                </>
+                {/*: null}*/}
             </>
         )
     }
