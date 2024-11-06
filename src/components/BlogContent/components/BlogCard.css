@@ -1,0 +1,9 @@
+.post {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.post svg {
+    font-size: 40px;
+}
