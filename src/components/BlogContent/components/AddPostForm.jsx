@@ -20,10 +20,37 @@ export class AddPostForm extends Component {
         })
     }
 
+    createPost = (e) => {
+        e.preventDefault()
+        const post = {
+            id: this.props.blockArr.length + 1,
+            title: this.state.postTitle,
+            description: this.state.postDesc,
+            liked: false
+        }
+
+        console.log(post)
+
+        this.props.addNewBlogPost(post)
+        this.props.handleAddFormHide()
+    }
+
+    // componentDidMount() {
+    //     console.log('Компонент формы отрисовался')
+    // }
+    //
+    // componentDidUpdate(prevProps, prevState, snapshot) {
+    //     console.log('Компонент формы обновился')
+    // }
+    //
+    // componentWillUnmount() {
+    //     console.log('Компонент формы удален')
+    // }
+
     render() {
         return (
             <>
-                <form action="" className="AddPostForm">
+                <form className="AddPostForm" onSubmit={this.createPost}>
                     <button className="hideBtn" onClick={this.props.handleAddFormHide}><CancelIcon/></button>
                     <h2>Создание поста</h2>
                     <div>
@@ -33,6 +60,7 @@ export class AddPostForm extends Component {
                             placeholder="Заголовок поста"
                             value={this.state.postTitle}
                             onChange={this.handlePostTitleChange}
+                            required
                         />
                     </div>
                     <div>
@@ -42,10 +70,11 @@ export class AddPostForm extends Component {
                             placeholder="Описание поста"
                             value={this.state.postDescription}
                             onChange={this.handlePostDescChange}
+                            required
                         />
                     </div>
                     <div>
-                        <button onClick={this.props.handleAddFormHide} className="blackBtn" type="button">Добавить пост
+                        <button className="blackBtn" type="submit">Добавить пост
                         </button>
                     </div>
                 </form>

@@ -1,14 +1,14 @@
 import './BlogContent.css'
-import {posts} from "../../shared/projectData";
 import {BlogCard} from "./components/BlogCard";
 import {Component} from "react";
 import {AddPostForm} from "./components/AddPostForm";
+import axios from "axios";
 
 export class BlogContent extends Component {
     state = {
         /*showBlog: true,*/
         showAddForm: false,
-        blockArr: JSON.parse(localStorage.getItem('blogPosts')) || posts
+        blockArr: []
     }
 
     likePost = pos => {
@@ -54,6 +54,43 @@ export class BlogContent extends Component {
         })
     }
 
+    handleEscape = (e) => {
+        window.addEventListener('keyup', (e) => {
+            if (e.key === 'Escape' && this.state.showAddForm) {
+                this.handleAddFormHide()
+            }
+        })
+    }
+
+    addNewBlogPost = (blogPost) => {
+        this.setState((state) => {
+            const posts = [...state.blockArr]
+            posts.push(blogPost)
+            localStorage.setItem('blogPosts', JSON.stringify(posts))
+            return {
+                blockArr: posts
+            }
+        })
+    }
+
+    componentDidMount() {
+        axios.get('https://5fb3db44b6601200168f7fba.mockapi.io/api/posts')
+            .then((response) => {
+                this.setState({
+                    blockArr: response.data
+                })
+            })
+
+            .catch((err) => {
+                console.log(err)
+            })
+        window.addEventListener('keyup', this.handleEscape)
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('keyup', this.handleEscape)
+    }
+
     render() {
         const blogPosts = this.state.blockArr.map((item, pos) => {
             return (
@@ -68,9 +105,17 @@ export class BlogContent extends Component {
             )
         })
 
+        if (this.state.blockArr.length === 0)
+            return <h1>Загружаем данные...</h1>
+
         return (
-            <>
-                {this.state.showAddForm ? <AddPostForm handleAddFormHide={this.handleAddFormHide}/> : null}
+            <div className="blogPage">
+                {this.state.showAddForm && (
+                    <AddPostForm
+                        blockArr={this.state.blockArr}
+                        addNewBlogPost={this.addNewBlogPost}
+                        handleAddFormHide={this.handleAddFormHide}/>
+                )}
 
                 {/*<button onClick={this.toggleBlog}>
                     {
@@ -80,14 +125,16 @@ export class BlogContent extends Component {
                 {/*{
                     this.state.showBlog ?*/}
                 <>
-                    <h1>Simple Blog</h1>
-                    <button className="blackBtn" onClick={this.handleAddFormShow}>Создать новый пост</button>
+                    <h1>Блог</h1>
+                    <div className="addNewPost">
+                        <button className="blackBtn" onClick={this.handleAddFormShow}>Создать новый пост</button>
+                    </div>
                     <div className="posts">
                         {blogPosts}
                     </div>
                 </>
                 {/*: null}*/}
-            </>
+            </div>
         )
     }
 }
