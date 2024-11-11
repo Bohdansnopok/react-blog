@@ -8,7 +8,25 @@ export class BlogContent extends Component {
     state = {
         /*showBlog: true,*/
         showAddForm: false,
-        blockArr: []
+        blockArr: [],
+        isPending: false
+    }
+
+    fetchPosts = () => {
+        this.setState({
+            isPending: true
+        })
+        axios.get('https://5fb3db44b6601200168f7fba.mockapi.io/api/posts')
+            .then((response) => {
+                this.setState({
+                    blockArr: response.data,
+                    isPending: false
+                })
+            })
+
+            .catch((err) => {
+                console.log(err)
+            })
     }
 
     likePost = pos => {
@@ -30,15 +48,17 @@ export class BlogContent extends Component {
         })
     }*/
 
-    deletePost = pos => {
-        if (window.confirm(`Удалить ${this.state.blockArr[pos].title}?`)) {
-            const temp = [...this.state.blockArr]
-            temp.splice(pos, 1)
-            this.setState({
-                blockArr: temp
-            })
+    deletePost = (blogPost) => {
+        if (window.confirm(`Удалить ${blogPost.title}?`)) {
 
-            localStorage.setItem('blogPosts', JSON.stringify(temp))
+            axios.delete(`https://5fb3db44b6601200168f7fba.mockapi.io/api/posts/${blogPost.id}`)
+                .then((obj) => {
+                    console.log('delete post =>', obj)
+                    this.fetchPosts()
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
         }
     }
 
@@ -74,16 +94,7 @@ export class BlogContent extends Component {
     }
 
     componentDidMount() {
-        axios.get('https://5fb3db44b6601200168f7fba.mockapi.io/api/posts')
-            .then((response) => {
-                this.setState({
-                    blockArr: response.data
-                })
-            })
-
-            .catch((err) => {
-                console.log(err)
-            })
+        this.fetchPosts()
         window.addEventListener('keyup', this.handleEscape)
     }
 
@@ -100,7 +111,7 @@ export class BlogContent extends Component {
                     description={item.description}
                     liked={item.liked}
                     likePost={() => this.likePost(pos)}
-                    deletePost={() => this.deletePost(pos)}
+                    deletePost={() => this.deletePost(item)}
                 />
             )
         })
@@ -129,6 +140,9 @@ export class BlogContent extends Component {
                     <div className="addNewPost">
                         <button className="blackBtn" onClick={this.handleAddFormShow}>Создать новый пост</button>
                     </div>
+                    {
+                        this.state.isPending && <h2>Подождите...</h2>
+                    }
                     <div className="posts">
                         {blogPosts}
                     </div>
