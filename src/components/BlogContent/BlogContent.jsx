@@ -4,13 +4,16 @@ import {Component} from "react";
 import {AddPostForm} from "./components/AddPostForm";
 import CircularProgress from '@mui/material/CircularProgress';
 import axios from "axios";
+import {EditPostForm} from "./components/EditPostForm";
 
 export class BlogContent extends Component {
     state = {
         /*showBlog: true,*/
         showAddForm: false,
+        showEditForm: false,
         blockArr: [],
-        isPending: false
+        isPending: false,
+        selectedPost: {}
     }
 
     fetchPosts = () => {
@@ -86,30 +89,52 @@ export class BlogContent extends Component {
         })
     }
 
+    handleEditFormShow = () => {
+        this.setState({
+            showEditForm: true,
+        })
+    }
+
+    editBlogPost = (updatedBlogPost) => {
+        this.setState({
+            isPending: true
+        })
+
+        axios.put(`https://5fb3db44b6601200168f7fba.mockapi.io/api/posts/${updatedBlogPost.id}`,
+            updatedBlogPost)
+            .then((response) => {
+                console.log('пост отредактирован=>', response.data)
+                this.fetchPosts()
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }
+
+    handleEditFormHide = () => {
+        this.setState({
+            showEditForm: false,
+        })
+    }
+
     handleAddFormHide = () => {
         this.setState({
             showAddForm: false,
         })
     }
 
-    handleEscape = (e) => {
-        window.addEventListener('keyup', (e) => {
-            if (e.key === 'Escape' && this.state.showAddForm) {
-                this.handleAddFormHide()
-            }
+    handleSelectedPost = (blogPost) => {
+        this.setState({
+            selectedPost: blogPost
         })
     }
 
     componentDidMount() {
         this.fetchPosts()
-        window.addEventListener('keyup', this.handleEscape)
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('keyup', this.handleEscape)
     }
 
     render() {
+        console.log(this.state.selectedPost)
         const blogPosts = this.state.blockArr.map((item, pos) => {
             return (
                 <BlogCard
@@ -119,6 +144,8 @@ export class BlogContent extends Component {
                     liked={item.liked}
                     likePost={() => this.likePost(item)}
                     deletePost={() => this.deletePost(item)}
+                    handleEditFormShow={this.handleEditFormShow}
+                    handleSelectedPost={() => this.handleSelectedPost(item)}
                 />
             )
         })
@@ -136,6 +163,16 @@ export class BlogContent extends Component {
                         addNewBlogPost={this.addNewBlogPost}
                         handleAddFormHide={this.handleAddFormHide}/>
                 )}
+
+                {
+                    this.state.showEditForm && (
+                        <EditPostForm
+                            handleEditFormHide={this.handleEditFormHide}
+                            selectedPost={this.state.selectedPost}
+                            editBlogPost={this.editBlogPost}
+                        />
+                    )
+                }
 
                 {/*<button onClick={this.toggleBlog}>
                     {

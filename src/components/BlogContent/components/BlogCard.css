@@ -4,9 +4,15 @@
 }
 
 .post svg {
-    font-size: 40px;
+    font-size: 32px;
 }
 
-.deleteBtn {
+.postControl {
+    display: flex;
+    align-items: center;
     margin-left: auto;
+}
+
+.postControl button {
+    padding: 0;
 }
