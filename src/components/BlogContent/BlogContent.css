@@ -1,5 +1,18 @@
+.blogPage {
+    position: relative;
+}
+
+.blogPage .preloader {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    width: 100%;
+    height: 100%;
+}
+
 .addNewPost {
     text-align: center;
+    position: relative;
 }
 
 .posts {

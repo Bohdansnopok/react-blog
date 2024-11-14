@@ -2,6 +2,7 @@ import './BlogContent.css'
 import {BlogCard} from "./components/BlogCard";
 import {Component} from "react";
 import {AddPostForm} from "./components/AddPostForm";
+import CircularProgress from '@mui/material/CircularProgress';
 import axios from "axios";
 
 export class BlogContent extends Component {
@@ -13,9 +14,6 @@ export class BlogContent extends Component {
     }
 
     fetchPosts = () => {
-        this.setState({
-            isPending: true
-        })
         axios.get('https://5fb3db44b6601200168f7fba.mockapi.io/api/posts')
             .then((response) => {
                 this.setState({
@@ -29,15 +27,18 @@ export class BlogContent extends Component {
             })
     }
 
-    likePost = pos => {
-        const temp = [...this.state.blockArr];
-        temp[pos].liked = !temp[pos].liked
+    likePost = (blogPost) => {
+        const temp = {...blogPost}
+        temp.liked = !temp.liked
 
-        this.setState({
-            blockArr: temp
-        })
-
-        localStorage.setItem('blogPosts', JSON.stringify(temp))
+        axios.put(`https://5fb3db44b6601200168f7fba.mockapi.io/api/posts/${blogPost.id}`, temp)
+            .then((response) => {
+                console.log('changed post =>', response.data)
+                this.fetchPosts()
+            })
+            .catch((err) => {
+                console.log(err)
+            })
     }
 
     /*toggleBlog = () => {
@@ -50,6 +51,9 @@ export class BlogContent extends Component {
 
     deletePost = (blogPost) => {
         if (window.confirm(`Удалить ${blogPost.title}?`)) {
+            this.setState({
+                isPending: true
+            })
 
             axios.delete(`https://5fb3db44b6601200168f7fba.mockapi.io/api/posts/${blogPost.id}`)
                 .then((obj) => {
@@ -60,6 +64,20 @@ export class BlogContent extends Component {
                     console.log(err)
                 })
         }
+    }
+
+    addNewBlogPost = (blogPost) => {
+        this.setState({
+            isPending: true
+        })
+        axios.post('https://5fb3db44b6601200168f7fba.mockapi.io/api/posts/', blogPost)
+            .then((response) => {
+                console.log('post add=>', response.data)
+                this.fetchPosts()
+            })
+            .catch((err) => {
+                console.log(err)
+            })
     }
 
     handleAddFormShow = () => {
@@ -82,17 +100,6 @@ export class BlogContent extends Component {
         })
     }
 
-    addNewBlogPost = (blogPost) => {
-        this.setState((state) => {
-            const posts = [...state.blockArr]
-            posts.push(blogPost)
-            localStorage.setItem('blogPosts', JSON.stringify(posts))
-            return {
-                blockArr: posts
-            }
-        })
-    }
-
     componentDidMount() {
         this.fetchPosts()
         window.addEventListener('keyup', this.handleEscape)
@@ -110,7 +117,7 @@ export class BlogContent extends Component {
                     title={item.title}
                     description={item.description}
                     liked={item.liked}
-                    likePost={() => this.likePost(pos)}
+                    likePost={() => this.likePost(item)}
                     deletePost={() => this.deletePost(item)}
                 />
             )
@@ -118,6 +125,8 @@ export class BlogContent extends Component {
 
         if (this.state.blockArr.length === 0)
             return <h1>Загружаем данные...</h1>
+
+        const postsOpacity = this.state.isPending ? 0.5 : 1
 
         return (
             <div className="blogPage">
@@ -140,12 +149,13 @@ export class BlogContent extends Component {
                     <div className="addNewPost">
                         <button className="blackBtn" onClick={this.handleAddFormShow}>Создать новый пост</button>
                     </div>
-                    {
-                        this.state.isPending && <h2>Подождите...</h2>
-                    }
-                    <div className="posts">
+
+                    <div className="posts" style={{opacity: postsOpacity}}>
                         {blogPosts}
                     </div>
+                    {
+                        this.state.isPending && <h2><CircularProgress className="preloader"/></h2>
+                    }
                 </>
                 {/*: null}*/}
             </div>
