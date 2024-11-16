@@ -1,12 +1,12 @@
-import './Header.css'
+import style from './Header.module.css'
 
 export const Header = () => {
     return (
-        <header>
+        <header className={style.header}>
             <nav>
-                <a href="#first">Home</a>
-                <a href="#second">About</a>
-                <a href="#third">Contact</a>
+                <a href="#">Home</a>
+                <a href="#">About</a>
+                <a href="#">Contact</a>
             </nav>
         </header>
     )

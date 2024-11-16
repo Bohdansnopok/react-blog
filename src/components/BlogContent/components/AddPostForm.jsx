@@ -1,4 +1,4 @@
-import './AddPostForm.css'
+import style from './AddPostForm.module.css'
 import CancelIcon from '@mui/icons-material/Cancel';
 import {Component} from "react";
 
@@ -57,12 +57,12 @@ export class AddPostForm extends Component {
     render() {
         return (
             <>
-                <form className="AddPostForm" onSubmit={this.createPost}>
-                    <button className="hideBtn" onClick={this.props.handleAddFormHide}><CancelIcon/></button>
+                <form className={style.AddPostForm} onSubmit={this.createPost}>
+                    <button className={style.hideBtn} onClick={this.props.handleAddFormHide}><CancelIcon/></button>
                     <h2>Создание поста</h2>
                     <div>
                         <input
-                            className="addFormInput"
+                            className={style.addFormInput}
                             type="text" name='postTitle'
                             placeholder="Заголовок поста"
                             value={this.state.postTitle}
@@ -72,7 +72,7 @@ export class AddPostForm extends Component {
                     </div>
                     <div>
                         <textarea
-                            className="addFormInput"
+                            className={style.addFormInput}
                             name="postDescription"
                             placeholder="Описание поста"
                             value={this.state.postDesc}
@@ -85,7 +85,7 @@ export class AddPostForm extends Component {
                         </button>
                     </div>
                 </form>
-                <div onClick={this.props.handleAddFormHide} className="overlay">
+                <div onClick={this.props.handleAddFormHide} className={style.overlay}>
                 </div>
             </>
         )

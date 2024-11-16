@@ -1,4 +1,4 @@
-import './BlogCard.css'
+import style from './BlogCard.module.css'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import EditIcon from '@mui/icons-material/Edit';
@@ -13,8 +13,8 @@ export const BlogCard = ({title, description, liked, likePost, deletePost, handl
     const heartFill = liked ? 'crimson' : 'darkgray'
 
     return (
-        <div className="post">
-            <div className="postContent">
+        <div className={style.post}>
+            <div className={style.postContent}>
                 <h2>{title}</h2>
                 <p>
                     {description}
@@ -25,11 +25,11 @@ export const BlogCard = ({title, description, liked, likePost, deletePost, handl
                     </button>
                 </div>
             </div>
-            <div className="postControl">
-                <button className="editBtn" onClick={showEditForm}>
+            <div className={style.postControl}>
+                <button className={style.editBtn} onClick={showEditForm}>
                     <EditIcon/>
                 </button>
-                <button className="deleteBtn" onClick={deletePost}>
+                <button className={style.deleteBtn} onClick={deletePost}>
                     <DeleteForeverIcon/>
                 </button>
             </div>

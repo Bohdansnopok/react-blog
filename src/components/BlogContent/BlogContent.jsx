@@ -1,4 +1,4 @@
-import './BlogContent.css'
+import style from './BlogContent.module.css'
 import {BlogCard} from "./components/BlogCard";
 import {Component} from "react";
 import {AddPostForm} from "./components/AddPostForm";
@@ -156,7 +156,7 @@ export class BlogContent extends Component {
         const postsOpacity = this.state.isPending ? 0.5 : 1
 
         return (
-            <div className="blogPage">
+            <div className={style.blogPage}>
                 {this.state.showAddForm && (
                     <AddPostForm
                         blockArr={this.state.blockArr}
@@ -183,15 +183,15 @@ export class BlogContent extends Component {
                     this.state.showBlog ?*/}
                 <>
                     <h1>Блог</h1>
-                    <div className="addNewPost">
-                        <button className="blackBtn" onClick={this.handleAddFormShow}>Создать новый пост</button>
+                    <div className={style.addNewPost}>
+                        <button className={style.blackBtn} onClick={this.handleAddFormShow}>Создать новый пост</button>
                     </div>
 
-                    <div className="posts" style={{opacity: postsOpacity}}>
+                    <div className={style.posts} style={{opacity: postsOpacity}}>
                         {blogPosts}
                     </div>
                     {
-                        this.state.isPending && <h2><CircularProgress className="preloader"/></h2>
+                        this.state.isPending && <h2><CircularProgress className={style.preloader}/></h2>
                     }
                 </>
                 {/*: null}*/}

@@ -1,4 +1,4 @@
-import './Footer.css'
+import style from './Footer.module.css'
 
 export const Footer = (props) => {
     return (

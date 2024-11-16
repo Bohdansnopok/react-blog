@@ -1,4 +1,4 @@
-import './EditPostForm.css'
+import style from './EditPostForm.module.css'
 import CancelIcon from '@mui/icons-material/Cancel';
 import {Component} from "react";
 
@@ -54,12 +54,12 @@ export class EditPostForm extends Component {
     render() {
         return (
             <>
-                <form className="editPostForm" onSubmit={this.savePost}>
-                    <button className="hideBtn" onClick={this.props.handleEditFormHide}><CancelIcon/></button>
+                <form className={style.editPostForm} onSubmit={this.savePost}>
+                    <button className={style.hideBtn} onClick={this.props.handleEditFormHide}><CancelIcon/></button>
                     <h2>Редактирование поста</h2>
                     <div>
                         <input
-                            className="editFormInput"
+                            className={style.editFormInput}
                             type="text" name='postTitle'
                             placeholder="Заголовок поста"
                             value={this.state.postTitle}
@@ -69,7 +69,7 @@ export class EditPostForm extends Component {
                     </div>
                     <div>
                         <textarea
-                            className="editFormInput"
+                            className={style.editFormInput}
                             name="postDescription"
                             placeholder="Описание поста"
                             value={this.state.postDesc}
@@ -82,7 +82,7 @@ export class EditPostForm extends Component {
                         </button>
                     </div>
                 </form>
-                <div onClick={this.props.handleEditFormHide} className="overlay">
+                <div onClick={this.props.handleEditFormHide} className={style.overlay}>
                 </div>
             </>
         )
