@@ -20,15 +20,6 @@
     margin: 0 auto;
 }
 
-.blackBtn {
-    padding: 5px 10px;
-    border-radius: 16px;
-    background-color: black;
-    color: white;
-    transition: all .3s;
-
-}
-
 .blackBtn:hover {
     background-color: rgba(1, 1, 1, 0.8);
 }

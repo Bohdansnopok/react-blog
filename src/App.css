@@ -21,10 +21,10 @@ button {
   background-color: unset;
 }
 
-input, textarea {
+/*input, textarea {
   outline: unset;
   border: none;
-}
+}*/
 
 input, button, textarea {
   font-family: 'Nunito', sans-serif;
@@ -37,5 +37,18 @@ main {
 }
 
 h1 {
+  font-size: 40px;
   text-align: center;
+}
+
+.blackBtn {
+  padding: 5px 10px;
+  border-radius: 16px;
+  background-color: black;
+  color: white;
+  transition: all .3s;
+}
+
+.blackBtn:hover {
+  background-color: rgba(1, 1, 1, 0.8);
 }
