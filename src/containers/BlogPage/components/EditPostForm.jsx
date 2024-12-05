@@ -1,91 +1,79 @@
 import style from './EditPostForm.module.css'
 import CancelIcon from '@mui/icons-material/Cancel';
-import {Component} from "react";
+import {useEffect, useState} from "react";
 
-export class EditPostForm extends Component {
-    state = {
-        postTitle: this.props.selectedPost.title,
-        postDesc: this.props.selectedPost.description
+export const EditPostForm = (props) => {
+    const [postTitle, setPostTitle] = useState(props.selectedPost.title)
+    const [postDesc, setPostDesc] = useState(props.selectedPost.description)
+
+    const handlePostTitleChange = e => {
+        setPostTitle(e.target.value)
     }
 
-    handlePostTitleChange = e => {
-        this.setState({
-            postTitle: e.target.value
-        })
+    const handlePostDescChange = e => {
+        setPostDesc(e.target.value)
     }
 
-    handlePostDescChange = e => {
-        this.setState({
-            postDesc: e.target.value
-        })
-    }
-
-    savePost = (e) => {
+    const savePost = (e) => {
         e.preventDefault()
         const post = {
-            id: this.props.selectedPost.id,
-            title: this.state.postTitle,
-            description: this.state.postDesc,
-            liked: this.props.selectedPost.liked
+            id: props.selectedPost.id,
+            title: postTitle,
+            description: postDesc,
+            liked: props.selectedPost.liked
         }
 
         console.log(post)
 
-        this.props.editBlogPost(post)
-        this.props.handleEditFormHide()
+        props.editBlogPost(post)
+        props.handleEditFormHide()
     }
 
-    handleEscape = (e) => {
-        window.addEventListener('keyup', (e) => {
+
+    useEffect(() => {
+        const handleEscape = (e) => {
             if (e.key === 'Escape') {
-                this.props.handleEditFormHide()
+                props.handleEditFormHide()
             }
-        })
-    }
+        }
+        window.addEventListener('keyup', handleEscape)
 
-    componentDidMount() {
-        window.addEventListener('keyup', this.handleEscape)
-    }
+        return () => window.removeEventListener('keyup', handleEscape)
+    }, [props])
 
-    componentWillUnmount() {
-        window.removeEventListener('keyup', this.handleEscape)
-    }
-
-    render() {
-        return (
-            <>
-                <form className={style.editPostForm} onSubmit={this.savePost}>
-                    <button className={style.hideBtn} onClick={this.props.handleEditFormHide}><CancelIcon/></button>
-                    <h2>Редактирование поста</h2>
-                    <div>
-                        <input
-                            className={style.editFormInput}
-                            type="text" name='postTitle'
-                            placeholder="Заголовок поста"
-                            value={this.state.postTitle}
-                            onChange={this.handlePostTitleChange}
-                            required
-                        />
-                    </div>
-                    <div>
+    return (
+        <>
+            <form className={style.editPostForm} onSubmit={savePost}>
+                <button className={style.hideBtn} onClick={props.handleEditFormHide}><CancelIcon/></button>
+                <h2>Редактирование поста</h2>
+                <div>
+                    <input
+                        className={style.editFormInput}
+                        type="text" name='postTitle'
+                        placeholder="Заголовок поста"
+                        value={postTitle}
+                        onChange={handlePostTitleChange}
+                        required
+                    />
+                </div>
+                <div>
                         <textarea
                             className={style.editFormInput}
                             name="postDescription"
                             placeholder="Описание поста"
-                            value={this.state.postDesc}
-                            onChange={this.handlePostDescChange}
+                            value={postDesc}
+                            onChange={handlePostDescChange}
                             rows={8}
                             required
                         />
-                    </div>
-                    <div>
-                        <button className="blackBtn" type="submit">Сохранить пост
-                        </button>
-                    </div>
-                </form>
-                <div onClick={this.props.handleEditFormHide} className={style.overlay}>
                 </div>
-            </>
-        )
-    }
+                <div>
+                    <button className="blackBtn" type="submit">Сохранить пост
+                    </button>
+                </div>
+            </form>
+            <div onClick={props.handleEditFormHide} className={style.overlay}>
+            </div>
+        </>
+    )
 }

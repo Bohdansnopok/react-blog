@@ -4,9 +4,16 @@
   box-sizing: border-box
 }
 
-body {
+body, html {
   margin: 0;
   font-family: 'Nunito', sans-serif;
+  height: 100%;
+}
+
+.App {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 a {
@@ -34,6 +41,7 @@ input, button, textarea {
 main {
   padding: 10px;
   min-height: calc(100vh - 100px);
+  flex: 1 1 auto;
 }
 
 h1 {
