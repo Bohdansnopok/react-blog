@@ -20,7 +20,7 @@ export const BlogPage = () => {
         source = axios.CancelToken.source();
         axios.get(postsApi, {cancelToken: source.token})
             .then((response) => {
-                blockArr(response.data)
+                setBlockArr(response.data)
                 isPending(false)
             })
 
