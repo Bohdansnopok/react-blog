@@ -1,6 +1,6 @@
 import style from './BlogPage.module.css';
 import {BlogCard} from "./components/BlogCard";
-import {Component, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {AddPostForm} from "./components/AddPostForm";
 import CircularProgress from '@mui/material/CircularProgress';
 import axios from "axios";
@@ -21,7 +21,7 @@ export const BlogPage = () => {
         axios.get(postsApi, {cancelToken: source.token})
             .then((response) => {
                 setBlockArr(response.data)
-                isPending(false)
+                setIsPending(false)
             })
 
             .catch((err) => {
@@ -59,7 +59,7 @@ export const BlogPage = () => {
 
     const deletePost = (blogPost) => {
         if (window.confirm(`Удалить ${blogPost.title}?`)) {
-            isPending(true)
+            setIsPending(true)
 
             axios.delete(`${postsApi}/${blogPost.id}`)
                 .then((obj) => {
@@ -73,7 +73,7 @@ export const BlogPage = () => {
     }
 
     const addNewBlogPost = (blogPost) => {
-        isPending(true)
+        setIsPending(true)
 
         axios.post(postsApi, blogPost)
             .then((response) => {
@@ -86,15 +86,15 @@ export const BlogPage = () => {
     }
 
     const handleAddFormShow = () => {
-        showAddForm(true)
+        setShowAddForm(true)
     }
 
     const handleEditFormShow = () => {
-        showEditForm(true)
+        setShowEditForm(true)
     }
 
     const editBlogPost = (updatedBlogPost) => {
-        isPending(true)
+        setIsPending(true)
 
         axios.put(`${postsApi}/${updatedBlogPost.id}`,
             updatedBlogPost)
@@ -108,15 +108,15 @@ export const BlogPage = () => {
     }
 
     const handleEditFormHide = () => {
-        showEditForm(false)
+        setShowEditForm(false)
     }
 
     const handleAddFormHide = () => {
-        showAddForm(false)
+        setShowAddForm(false)
     }
 
     const handleSelectedPost = (blogPost) => {
-        selectedPost(blogPost)
+        setSelectedPost(blogPost)
     }
 
     console.log(selectedPost)
